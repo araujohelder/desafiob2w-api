@@ -12,37 +12,38 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.desafiob2wapi.model.Planet;
-import com.desafiob2wapi.repository.PlanetRepository;
+import com.desafiob2wapi.repository.planet.filter.PlanetFilter;
+import com.desafiob2wapi.service.PlanetService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class Desafiob2wApi1ApplicationTests {
 	
 	 @Autowired
-	 PlanetRepository repository;
+	 PlanetService planetService;
 	
 	 @Before
      public void setUp() {
 
-        repository.deleteAll();
+        planetService.deleteAll();
        
         Planet alderaan = new Planet();
         alderaan.setName("Alderaan");
         alderaan.setClimate("temperate");
         alderaan.setGround("ocean");
-        alderaan = repository.save(alderaan);
+        alderaan = planetService.save(alderaan);
         
         Planet dagobah = new Planet();
         dagobah.setName("Dagobah");
         dagobah.setClimate("temperate");
         dagobah.setGround("ocean");
-        dagobah = repository.save(dagobah);
+        dagobah = planetService.save(dagobah);
         
         Planet kamino = new Planet();
         kamino.setName("Kamino");
         kamino.setClimate("temperate");
         kamino.setGround("ocean");
-        kamino = repository.save(kamino);
+        kamino = planetService.save(kamino);
      }
 	 
 	
@@ -52,29 +53,33 @@ public class Desafiob2wApi1ApplicationTests {
         saturno.setName("Saturno");
         saturno.setClimate("temperate");
         saturno.setGround("ocean");
-        saturno = repository.save(saturno);
-        Planet sat = repository.save(saturno);
+        saturno = planetService.save(saturno);
+        Planet sat = planetService.save(saturno);
         assertThat(sat.getId()).isNotNull();
     }
 
     @Test
-    public void findsByLastName() {
-        List<Planet> result = repository.findByName("Kamino");
+    public void findsBytName() {
+    	PlanetFilter planetFilter = new PlanetFilter();
+    	planetFilter.setName("Kamino");
+        List<Planet> result = planetService.search((planetFilter));
         assertThat(result).hasSize(1).extracting("name").contains("Kamino");
     }
 
     @Test
     public void findAll() {
-        List<Planet> result = repository.findAll();
+        List<Planet> result = planetService.findAll();
         assertThat(result).hasSize(3);
     }
     
     @Test
     public void removePlanet() {
-    	List<Planet> result = repository.findByName("Kamino");
+    	PlanetFilter planetFilter = new PlanetFilter();
+    	planetFilter.setName("Kamino");
+    	List<Planet> result = planetService.search(planetFilter);
     	Planet planet = result.get(0);
-    	repository.deleteById(planet.getId());
-    	List<Planet> result2 = repository.findByName("Kamino");
+    	planetService.delete(planet.getId());
+    	List<Planet> result2 = planetService.search(planetFilter);
     	assertThat(result2).hasSize(0);
     }
 }

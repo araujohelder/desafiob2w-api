@@ -21,7 +21,6 @@ import org.springframework.stereotype.Component;
 public class CorsFilter implements Filter {
 	
 	private final static String ORIGIN_ALLOW = "https://desafiob2w-ui.herokuapp.com";
-	//private final static String ORIGIN_ALLOW = "http://localhost:4200";
 
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)

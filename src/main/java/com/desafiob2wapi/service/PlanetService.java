@@ -55,4 +55,8 @@ public class PlanetService {
 		this.planetRepository.save(planetReturn);
 		return planetReturn;
 	}
+	
+	public void deleteAll() {
+		this.planetRepository.deleteAll();
+	}
 }
